@@ -1,70 +1,147 @@
-# Getting Started with Create React App
+# React 学习笔记
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## React 基础
 
-## Available Scripts
+使用 react 脚手架开发
 
-In the project directory, you can run:
+`npx create-react-app my-app`
 
-### `yarn start`
+React.createElement() 用于创建 react 元素
+reactDOM.render() 方法负责渲染 react 元素到页面中（web 应用）
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## JSX 使用
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+> JSX，是一个 JavaScript 的语法扩展。我们建议在 React 中配合使用 JSX，JSX 可以很好地描述 UI 应该呈现出它应有交互的本质形式。JSX 可能会使人联想到模板语言，但它具有 JavaScript 的全部功能
 
-### `yarn test`
+- 基本使用
+  - 比 createElement 学习成本更低， 提升开发效率，所以更推荐 jsx 写法
+  ```javascript
+  const element = <h1>Hello, world!</h1>
+  ```
+  但 jsx 不是标准的 es 语法，它是语法扩展，需要使用 babel 编译处理，才能咋浏览器环境中使用, 编译 jsx 的包是`@babel/preset-reset`
+- react 元素名使用驼峰命名法。因为 JSX 语法上更接近 JavaScript 而不是 HTML，所以 React DOM 使用 camelCase（小驼峰命名）来定义属性的名称，而不使用 HTML 属性名称的命名约定
+- react 推荐是使用() 进行包裹，这可以避免遇到自动插入分号陷阱
+- jsx 样式处理，style 和 className, 推荐 className
+- 事件绑定
+  - on + 事件名称，使用驼峰命名法，事件对象 e,
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## React 特点：
 
-### `yarn build`
+- React 元素是不可变对象。一旦被创建，你就无法更改它的子元素或者属性。一个元素就像电影的单帧：它代表了某个特定时刻的 UI
+  ，根据我们已有的知识，更新 UI 唯一的方式是创建一个全新的元素，并将其传入 ReactDOM.render()。
+- 完全利用 JS 语言自身的能力来编写 UI，而不是增强 HTML 功能（如 vue 中的模板之指令）
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## React 组件介绍
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+特点
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 可复用性
+- 独立性
+- 可组合
 
-### `yarn eject`
+创建方式
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- 函数组件（无状态组件）
+  - 约定一：函数名称大写字母开头
+  - 约定二：必须有返回值
+  ```javascript
+  function Welcome(props) {
+    return <h1>Hello, {props.name}</h1>
+  }
+  ```
+  - 渲染时将函数名作为标签名
+- 类组件（有状态组件）
+  - 必须大写字母开头
+  - 应该继承 React.Component 父类，从而可以使用父类中提供的方法和属性
+  - 必须提供 render 方法，且有返回值
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> Tip：
+>
+> 组件应该抽离为独立 js 文件
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 有状态组件和无状态组件
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1、初始化 state
 
-## Learn More
+2、setState() 修改状态
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+语法：`this.setState({/*要修改的数据*/})`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**事件处理程序的 this 指向**
 
-### Code Splitting
+render 中 this 指向组件实例，需要将事件处理程序中的 this 指向实例
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- 箭头函数，()=> this.handle() 中的 this 指向 render 中的 this， 也就是组件实例，class 中的实例方法直接使用箭头函数
 
-### Analyzing the Bundle Size
+  ```javascript
+  // 最简单的一种
+  handleClick = () => {
+    this.setState({
+      count: this.state.count + 1,
+    })
+  }
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- function.prototype.bind()
+  ```javascript
+  this.handle = this.handle.bind(this)
+  ```
 
-### Making a Progressive Web App
+## 表单处理
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 受控组件
 
-### Advanced Configuration
+受控组件，表单元素的值被 react 中的 state 控制
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```javascript
+<input
+  value={this.state.value}
+  onChange={(e) => this.setState({ value: e.target.value })}
+/>
+```
 
-### Deployment
+统一处理 input select checkbox 多种受控组件，提供 name 属性表示状态名称
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```javascript
+handleChange = (e) => {
+  const target = e.target
+  const value = target.type === 'checkbox' ? target.checked : target.value
+  const name = target.name
+  this.setState({
+    [name]: value,
+  })
+}
+```
 
-### `yarn build` fails to minify
+### 非受控组件
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+通过 ref 获取，
+
+```javascript
+// constructor 中初始化
+ React.createRef()
+//  为input 添加ref属性
+<input ref={this.txtRef} type="text"/>
+// 通过 this.txtRef.current.value获取到input的值
+console.log(this.txtRef.current.value)
+```
+
+不建议使用 ref，毕竟是操作 DOM
+
+## 组件进阶
+
+### 组件通讯
+
+- props 接收组件传递过来的数据，
+
+  - 可以传递任意类型的数据，传递 jsx、函数、字符串、数字等等
+  - 只读
+  - constructor 中的 this 想要读取 props 的话必须先将 props 传递给父级
+
+  ```javascript
+  constructor(props){
+  super(props)
+  // 可以使用this.props 啦
+  }
+
+  ```
