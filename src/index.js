@@ -1,44 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import src from './assets/pinia.jpg'
-// import App, { Hello, StateComp, ControlComp } from './App'
-// import Comment from './example/comments'
-// import { Father } from './example/concat'
-// import ValidProps from './example/props'
-import App from './example/lifeCircle'
-import Mouse from './example/render-props'
-import { withMouse } from './example/high-level'
+import App from './example/router'
 import reportWebVitals from './reportWebVitals'
-
-const PositionComp = (props) => {
-  return (
-    <h1>
-      当前坐标：({props.x}，{props.y})
-    </h1>
-  )
-}
-const WithMousePosition = withMouse(PositionComp, 'WithMousePosition')
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 ReactDOM.render(
   <React.StrictMode>
-    <WithMousePosition />
-    <Mouse>
-      {(data) => {
-        return (
-          <img
-            src={src}
-            style={{
-              position: 'absolute',
-              top: data.y,
-              left: data.x,
-            }}
-            height="200"
-            alt="logo"
-          />
-        )
-      }}
-    </Mouse>
-    {/* <App name="hello world" /> */}
+    <Router>
+      <App />
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 )

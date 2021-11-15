@@ -25,7 +25,7 @@ reactDOM.render() 方法负责渲染 react 元素到页面中（web 应用）
 - 事件绑定
   - on + 事件名称，使用驼峰命名法，事件对象 e,
 
-## React 特点：
+## React 特点
 
 - React 元素是不可变对象。一旦被创建，你就无法更改它的子元素或者属性。一个元素就像电影的单帧：它代表了某个特定时刻的 UI
   ，根据我们已有的知识，更新 UI 唯一的方式是创建一个全新的元素，并将其传入 ReactDOM.render()。
@@ -235,13 +235,59 @@ render（重新渲染） 执行的三种情况：
 
 1、render props 模式，把 prop 设置为函数类型，返回值作为内容
 推荐使用 children 代替 render 属性
+
 [示例代码](./src/example/render-props.js)
 
 2、高阶组件（HOC，Hight-Order Component）
+
 [示例代码](./src/example/high-level.js)
+
 目的：实现状态逻辑复用  
 采用包装（装饰）模式
 
 ```javascript
 const EnhancedComponent = withHOC(WrappedComponent)
 ```
+
+## React 原理
+
+- setState 是异步更新的，无论调用多少次 setState， 都只会执行一次 render 重新渲染
+
+[示例代码](./src/example/set-state.js)
+
+```javascript
+语法：
+（setState(updater, callback)）
+// 示例
+this.setState((state, props)=>{
+// state 始终是最新的state值
+}, ()=>{
+  // 状态更新后立即执行
+})
+```
+
+- jsx 语法转化过程，实际上是 createElement 方法的语法糖，会被@babel/preset-react 插件编译为 createElement() 方法，createElement() 最终生成 React 元素，也就是一个描述页面内容的 js 对象
+
+### 组件更新机制
+
+setState 方法调用之后
+
+- 父组件重新渲染时，也会重新渲染子组件，只会更新当前组件子树
+
+## 组件性能优化
+
+- 减轻 state，只存储与组件渲染相关的数据，不用做渲染的数据不应该放在 state 中，应该放在 this 中
+- 避免不必要的重新渲染，根据组件更新机制，父组件更新子组件也会重新渲染，以及自身 state 发生改变时也会重新渲染，应该使用 shouldComponentUpdate(nextProps, nextState)，数据没改变的话返回 false
+- [示例代码](./src/example/optimize.js)
+  要注意 setState 时不能去直接修改，要创建一个新数据，再赋值给 state
+
+## 虚拟 DOM 和 diff 算法
+
+虚拟 DOM，本质上是 js 对象，用于描述真实 DOM  
+虚拟 DOM 真正的意义在于脱离浏览器的束缚，为跨平台提供帮助
+
+## React 路由基础
+
+BrowserRouter 组件
+Link 组件，链接
+Route 组件
