@@ -235,10 +235,10 @@ render（重新渲染） 执行的三种情况：
 
 1、render props 模式，把 prop 设置为函数类型，返回值作为内容
 推荐使用 children 代替 render 属性
-[示例代码]('./src/example/render-props.js')
+[示例代码](./src/example/render-props.js)
 
 2、高阶组件（HOC，Hight-Order Component）
-[示例代码]('./src/example/high-level.js')
+[示例代码](./src/example/high-level.js)
 目的：实现状态逻辑复用  
 采用包装（装饰）模式
 
