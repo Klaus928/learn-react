@@ -145,3 +145,103 @@ console.log(this.txtRef.current.value)
   }
 
   ```
+
+- 父传子，props
+- 子传父，props 传函数对象， 在子组件中调用 this.props.methos('要传递的数据')
+- 兄弟组件， 状态提升到父级组件
+
+跨组件传递：Context
+调用 React.createContext() 创建的 Provider 和 Consumer 组件
+
+> Provider 接收一个 value 属性，传递给消费组件。一个 Provider 可以和多个消费组件有对应关系。多个 Provider 也可以嵌套使用，里层的会覆盖外层的数据
+
+```javascript
+const { Provider, Consumer } = React.createContext()
+
+// 父组件里提供数据
+<Provider value={this.props.msg}>
+  <ConcatComp getMsg={this.getChildMsg} />
+</Provider>
+// 子组件或孙组件接收数据
+<Consumer>{(data) => <span>{data}</span>}</Consumer>
+
+
+```
+
+### children 属性
+
+表示组件标签中的子节点， 值可以任意的，文本、组件、甚至是函数
+`this.props.children` 访问到
+
+### props 深入
+
+- props 校验
+  - `yarn add prop-types`
+    https://www.npmjs.com/package/prop-types
+  ```javascript
+  class ValidProps extends React.Component {
+    render() {
+      return <h1>{this.props.msg}</h1>
+    }
+  }
+  ValidProps.propTypes = {
+    msg: PropTypes.string,
+  }
+  ```
+- props 默认值， defaultProps 可以为 Class 组件添加默认 props
+  ```javascript
+  ValidProps.defaultProps = {
+    msg: 'hello React',
+  }
+  ```
+
+## 组件生命周期
+
+只有类组件才有生命周期
+
+### 生命周期的三个阶段
+
+![](https://img-blog.csdnimg.cn/3566de53780f42ea9bedd24905c2cd87.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA6ZOB5p-xZWY=,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+#### 初始化
+
+页面加载时就开始执行，执行顺序如下：
+
+- constructor，初始化 state, 为事件处理程序绑定 this
+- render（渲染），渲染 UI，注意不能调用 setState（创建时更新时都会执行）
+- componentDidMount（渲染完成后立即触发），发送网络请求， DOM 操作等，如果要使用 setState，必须要在 if 语句中，如果你的渲染依赖于 DOM 节点的大小或位置，比如实现 modals 和 tooltips 等情况下，你可以使用此方式处理
+
+#### 更新阶段
+
+render（重新渲染） 执行的三种情况：
+
+- 状态更新，组件状态发生改变
+- 执行 setState 时
+- forceUpdate()， 强制更新
+
+#### 卸载阶段
+
+执行 componentWillUnmount 钩子函数,如果添加了订阅，请不要忘记在 componentWillUnmount() 里取消订阅，执行清理工作，比如清除定时器等等
+
+### 不常用钩子函数
+
+![](https://img-blog.csdnimg.cn/5e70400dc12247419fe80c9e5036247a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA6ZOB5p-xZWY=,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+## render-props 和 高阶组件
+
+### 组件复用
+
+两种方法：
+
+1、render props 模式，把 prop 设置为函数类型，返回值作为内容
+推荐使用 children 代替 render 属性
+[示例代码]('./src/example/render-props.js')
+
+2、高阶组件（HOC，Hight-Order Component）
+[示例代码]('./src/example/high-level.js')
+目的：实现状态逻辑复用  
+采用包装（装饰）模式
+
+```javascript
+const EnhancedComponent = withHOC(WrappedComponent)
+```
