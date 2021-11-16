@@ -288,6 +288,23 @@ setState 方法调用之后
 
 ## React 路由基础
 
-BrowserRouter 组件
-Link 组件，链接
-Route 组件
+安装：
+
+`yarn add react-router-dom`
+
+[使用教程](https://reactrouter.com/docs/en/v6/getting-started/tutorial)
+
+- BrowserRouter 组件，包裹页面
+- Link 组件，导航菜单链接
+- Route 组件，配置路由规则， 必须放在 Routes 组件下
+
+编程式导航  
+对于`react-router-dom@6.x.x`
+[示例代码](./src/example/router.js)
+
+```javascript
+const navigate = useNavigate()
+const handleLogin = () => {
+  navigate('/home')
+}
+```
